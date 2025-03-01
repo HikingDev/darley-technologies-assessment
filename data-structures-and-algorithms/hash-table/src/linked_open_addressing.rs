@@ -1,5 +1,5 @@
 use std::collections::hash_map::RandomState;
-use std::hash::{BuildHasher, Hash, Hasher};
+use std::hash::{BuildHasher, Hash};
 
 use crate::traits::HashTable;
 
@@ -123,9 +123,7 @@ where
 
     /// Hashes the key and maps it to a slot index.
     fn index_for(&self, key: &K) -> usize {
-        let mut hasher = self.hasher_builder.build_hasher();
-        key.hash(&mut hasher);
-        (hasher.finish() % self.capacity as u64) as usize
+        (self.hasher_builder.hash_one(key) % self.capacity as u64) as usize
     }
 
     /// Finds the slot for `key` or an insertion slot (first tombstone or empty).
@@ -395,6 +393,8 @@ mod tests {
 
     #[test]
     fn test_collisions() {
+        use std::hash::Hasher;
+
         // Use a custom hasher that always returns the same hash
         struct AlwaysCollideHasher;
         impl Hasher for AlwaysCollideHasher {
