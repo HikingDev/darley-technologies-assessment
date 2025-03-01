@@ -6,7 +6,7 @@
 use clap::Parser;
 use std::error::Error;
 use std::str::FromStr;
-use word_processor::{WordProcessorConfig, io, parse_text};
+use word_processor::{EstimationMethod, WordProcessorConfig, estimate_capacity, io, parse_text};
 
 /// Capacity configuration for the hash table
 #[derive(Debug, Clone)]
@@ -92,9 +92,9 @@ struct Args {
     #[clap(long, action, default_value = "false")]
     skip_stop_words: bool,
 
-    /// Strip punctuation from words (default: true)
-    #[clap(long, action, default_value = "true")]
-    strip_punctuation: bool,
+    /// Strip punctuation from words (default: false)
+    #[clap(long, action, default_value = "false")]
+    keep_punctuation: bool,
 
     /// Multiplier for capacity estimation
     #[clap(long, default_value = "1.5", value_parser)]
@@ -112,7 +112,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("  Case sensitive: {}", args.case_sensitive);
     println!("  Include numbers: {}", args.include_numbers);
     println!("  Skip stop words: {}", args.skip_stop_words);
-    println!("  Strip punctuation: {}", !args.strip_punctuation);
+    println!("  Keep punctuation: {}", args.keep_punctuation);
 
     println!("\nReading from: {}", args.input);
     let text = if args.input.starts_with("http://") || args.input.starts_with("https://") {
@@ -125,12 +125,46 @@ fn main() -> Result<(), Box<dyn Error>> {
         .case_sensitive(args.case_sensitive)
         .include_numbers(args.include_numbers)
         .skip_stop_words(args.skip_stop_words)
-        .strip_punctuation(args.strip_punctuation)
+        .strip_punctuation(args.keep_punctuation)
         .capacity_factor(args.capacity_factor);
 
     // Parse text into words
     println!("Parsing text into words...");
     let words = parse_text(&text, &word_processor_config);
     println!("Found {} words in total", words.len());
+
+    println!("Determining required hash table capacity...");
+    let capacity = match args.capacity {
+        CapacityConfig::Fixed(size) => {
+            println!("Using fixed capacity: {}", size);
+            size
+        }
+        CapacityConfig::Auto => {
+            println!("Calculating capacity using full text analysis...");
+            let capacity = estimate_capacity(
+                &text,
+                &word_processor_config,
+                EstimationMethod::FullAnalysis,
+            )?;
+            println!("Calculated capacity needed: {}", capacity);
+            capacity
+        }
+        CapacityConfig::Sampling(sample_size) => {
+            println!(
+                "Estimating capacity using sampling ({} chars)...",
+                sample_size
+            );
+            let estimated = estimate_capacity(
+                &text,
+                &word_processor_config,
+                EstimationMethod::Sampling(sample_size),
+            )?;
+            println!("Estimated capacity: {}", estimated);
+            estimated
+        }
+    };
+
+    println!("Final hash table capacity: {}", capacity);
+
     Ok(())
 }
