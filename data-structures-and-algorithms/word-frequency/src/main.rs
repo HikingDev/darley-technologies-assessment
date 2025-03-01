@@ -121,6 +121,16 @@ fn main() -> Result<(), Box<dyn Error>> {
         io::read_from_file(&args.input)?
     };
 
-    println!("Successfully read {} bytes", text.len());
+    let word_processor_config = WordProcessorConfig::default()
+        .case_sensitive(args.case_sensitive)
+        .include_numbers(args.include_numbers)
+        .skip_stop_words(args.skip_stop_words)
+        .strip_punctuation(args.strip_punctuation)
+        .capacity_factor(args.capacity_factor);
+
+    // Parse text into words
+    println!("Parsing text into words...");
+    let words = parse_text(&text, &word_processor_config);
+    println!("Found {} words in total", words.len());
     Ok(())
 }
