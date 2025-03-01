@@ -1,3 +1,6 @@
-[dependencies]
-openhtable_core = { path = "../hash-table" }
-data_processor = { path = "../word-processor" }
+[workspace]
+resolver = "2"
+members = [
+  "hash-table",
+  "word-processor"
+]
