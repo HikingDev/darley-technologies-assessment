@@ -69,7 +69,7 @@ fn strip_punctuation(token: &str) -> String {
     }
 
     let mut start = 0;
-    let mut end = chars.len(); // Use chars.len() instead of token.len()
+    let mut end = chars.len();
 
     // Skip leading punctuation
     while start < end && is_punctuation(chars[start]) {
