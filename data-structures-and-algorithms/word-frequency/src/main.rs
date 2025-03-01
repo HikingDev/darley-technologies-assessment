@@ -4,6 +4,7 @@
 //! to analyze word frequencies in text from files or URLs.
 
 use clap::Parser;
+use hash_table::{HashTable, LinkedHashTable};
 use std::error::Error;
 use std::str::FromStr;
 use word_processor::{EstimationMethod, WordProcessorConfig, estimate_capacity, io, parse_text};
@@ -125,7 +126,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         .case_sensitive(args.case_sensitive)
         .include_numbers(args.include_numbers)
         .skip_stop_words(args.skip_stop_words)
-        .strip_punctuation(args.keep_punctuation)
+        .strip_punctuation(!args.keep_punctuation)
         .capacity_factor(args.capacity_factor);
 
     // Parse text into words
@@ -164,7 +165,37 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     };
 
-    println!("Final hash table capacity: {}", capacity);
+    println!("Creating hash table...");
+    let mut hash_table = LinkedHashTable::new(capacity);
+
+    // Count word frequencies
+    println!("Counting word frequencies...");
+    for word in words {
+        let count = match hash_table.get(&word) {
+            Some(&count) => count + 1,
+            None => 1,
+        };
+        hash_table.insert(word, count);
+    }
+
+    // Show first and last processed words (demonstrating O(1) operations)
+    if let Some((word, count)) = hash_table.get_first() {
+        println!("\nFirst processed word: '{}' (count: {})", word, count);
+    }
+    if let Some((word, count)) = hash_table.get_last() {
+        println!(
+            "Most recently processed word: '{}' (count: {})",
+            word, count
+        );
+    }
+
+    println!("\nChecking specific words:");
+    if let Some(&count) = hash_table.get(&"Cities,".into()) {
+        println!("'Cities' appears {} times", count);
+    }
+    if let Some(&count) = hash_table.get(&"eBooks".into()) {
+        println!("'eBooks' appears {} times", count);
+    }
 
     Ok(())
 }
