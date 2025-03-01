@@ -1,0 +1,3 @@
+[dependencies]
+openhtable_core = { path = "../hash-table" }
+data_processor = { path = "../word-processor" }
