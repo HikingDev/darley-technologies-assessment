@@ -9,5 +9,5 @@ word-processor = { path = "../word-processor" }
 clap = { version = "4.5", features = ["derive"] }
 
 [features]
-default = []
+default = ["url"]
 url = ["word-processor/url"]

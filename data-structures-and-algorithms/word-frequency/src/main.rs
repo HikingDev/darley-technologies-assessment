@@ -6,6 +6,7 @@
 use clap::Parser;
 use std::error::Error;
 use std::str::FromStr;
+use word_processor::{WordProcessorConfig, io, parse_text};
 
 /// Capacity configuration for the hash table
 #[derive(Debug, Clone)]
@@ -79,8 +80,8 @@ struct Args {
     #[clap(short, long, value_parser, default_value = "auto")]
     capacity: CapacityConfig,
 
-    /// Treat words as case-sensitive (default: false)
-    #[clap(long, action, default_value = "false")]
+    /// Treat words as case-sensitive (default: true)
+    #[clap(long, action, default_value = "true")]
     case_sensitive: bool,
 
     /// Include numbers as words (default: false)
@@ -91,9 +92,9 @@ struct Args {
     #[clap(long, action, default_value = "false")]
     skip_stop_words: bool,
 
-    /// Don't strip punctuation from words (default: false)
-    #[clap(long, action, default_value = "false")]
-    keep_punctuation: bool,
+    /// Strip punctuation from words (default: true)
+    #[clap(long, action, default_value = "true")]
+    strip_punctuation: bool,
 
     /// Multiplier for capacity estimation
     #[clap(long, default_value = "1.5", value_parser)]
@@ -111,10 +112,15 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("  Case sensitive: {}", args.case_sensitive);
     println!("  Include numbers: {}", args.include_numbers);
     println!("  Skip stop words: {}", args.skip_stop_words);
-    println!("  Strip punctuation: {}", !args.keep_punctuation);
+    println!("  Strip punctuation: {}", !args.strip_punctuation);
 
-    // TODO: Implement the actual functionality
-    println!("\nNot yet implemented.");
+    println!("\nReading from: {}", args.input);
+    let text = if args.input.starts_with("http://") || args.input.starts_with("https://") {
+        io::fetch_from_url(&args.input)?
+    } else {
+        io::read_from_file(&args.input)?
+    };
 
+    println!("Successfully read {} bytes", text.len());
     Ok(())
 }
