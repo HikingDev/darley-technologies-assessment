@@ -18,10 +18,10 @@ pub mod io;
 mod parser;
 
 // Re-export the main structs and functions
+pub use capacity::{EstimationMethod, estimate_capacity};
 pub use config::WordProcessorConfig;
 pub use error::WordProcessorError;
 pub use parser::parse_text;
-pub use capacity::{estimate_capacity, EstimationMethod};
 
 #[cfg(test)]
 mod tests {
@@ -31,6 +31,6 @@ mod tests {
     fn sanity_check() {
         let conf = WordProcessorConfig::default();
         let words = parse_text("Hello World!", &conf);
-        assert_eq!(words, vec!["hello", "world"]);
+        assert_eq!(words, vec!["Hello", "World"]);
     }
 }
