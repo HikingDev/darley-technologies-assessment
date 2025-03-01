@@ -63,10 +63,13 @@ fn process_token(token: &str, config: &WordProcessorConfig) -> Option<String> {
 
 /// Strips punctuation from the beginning and end of a token
 fn strip_punctuation(token: &str) -> String {
-    let mut start = 0;
-    let mut end = token.len();
-
     let chars: Vec<char> = token.chars().collect();
+    if chars.is_empty() {
+        return String::new();
+    }
+
+    let mut start = 0;
+    let mut end = chars.len(); // Use chars.len() instead of token.len()
 
     // Skip leading punctuation
     while start < end && is_punctuation(chars[start]) {
