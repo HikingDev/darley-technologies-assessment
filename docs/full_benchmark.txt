@@ -1,0 +1,85 @@
+insert/100              time:   [54.844 ns 55.083 ns 55.354 ns]
+insert/1000             time:   [50.904 ns 51.304 ns 51.716 ns]
+Found 14 outliers among 100 measurements (14.00%)
+  1 (1.00%) low mild
+  6 (6.00%) high mild
+  7 (7.00%) high severe
+insert/10000            time:   [90.226 ns 184.48 ns 305.51 ns]
+Found 8 outliers among 100 measurements (8.00%)
+  2 (2.00%) high mild
+  6 (6.00%) high severe
+insert/100000           time:   [12.484 µs 12.872 µs 13.233 µs]
+Found 1 outliers among 100 measurements (1.00%)
+  1 (1.00%) high mild
+
+get/100                 time:   [8.8081 ns 9.1630 ns 9.5850 ns]
+Found 18 outliers among 100 measurements (18.00%)
+  2 (2.00%) high mild
+  16 (16.00%) high severe
+get/1000                time:   [8.7446 ns 9.0430 ns 9.4120 ns]
+Found 15 outliers among 100 measurements (15.00%)
+  2 (2.00%) high mild
+  13 (13.00%) high severe
+get/10000               time:   [10.514 ns 11.090 ns 11.887 ns]
+Found 21 outliers among 100 measurements (21.00%)
+  10 (10.00%) high mild
+  11 (11.00%) high severe
+get/100000              time:   [8.3089 ns 8.5860 ns 8.9063 ns]
+Found 19 outliers among 100 measurements (19.00%)
+  2 (2.00%) high mild
+  17 (17.00%) high severe
+
+get_first/100           time:   [242.63 ps 243.69 ps 244.87 ps]
+Found 19 outliers among 100 measurements (19.00%)
+  2 (2.00%) low severe
+  4 (4.00%) low mild
+  8 (8.00%) high mild
+  5 (5.00%) high severe
+get_first/1000          time:   [242.43 ps 242.96 ps 243.48 ps]
+Found 8 outliers among 100 measurements (8.00%)
+  1 (1.00%) low severe
+  3 (3.00%) low mild
+  3 (3.00%) high mild
+  1 (1.00%) high severe
+get_first/10000         time:   [242.03 ps 242.61 ps 243.35 ps]
+Found 3 outliers among 100 measurements (3.00%)
+  1 (1.00%) low severe
+  2 (2.00%) high severe
+get_first/100000        time:   [244.08 ps 245.12 ps 246.34 ps]
+Found 2 outliers among 100 measurements (2.00%)
+  1 (1.00%) high mild
+  1 (1.00%) high severe
+
+get_last/100            time:   [240.42 ps 240.81 ps 241.22 ps]
+Found 2 outliers among 100 measurements (2.00%)
+  1 (1.00%) low mild
+  1 (1.00%) high severe
+get_last/1000           time:   [241.32 ps 242.24 ps 243.26 ps]
+Found 9 outliers among 100 measurements (9.00%)
+  2 (2.00%) low mild
+  6 (6.00%) high mild
+  1 (1.00%) high severe
+get_last/10000          time:   [239.45 ps 239.80 ps 240.17 ps]
+Found 7 outliers among 100 measurements (7.00%)
+  1 (1.00%) low mild
+  3 (3.00%) high mild
+  3 (3.00%) high severe
+get_last/100000         time:   [239.04 ps 239.40 ps 239.74 ps]
+Found 4 outliers among 100 measurements (4.00%)
+  1 (1.00%) low mild
+  3 (3.00%) high mild
+
+remove/100              time:   [359.38 ns 361.07 ns 362.81 ns]
+remove/1000             time:   [2.8762 µs 2.8844 µs 2.8974 µs]
+Found 13 outliers among 100 measurements (13.00%)
+  5 (5.00%) low severe
+  4 (4.00%) low mild
+  2 (2.00%) high mild
+  2 (2.00%) high severe
+remove/10000            time:   [29.843 µs 30.262 µs 30.771 µs]
+Found 14 outliers among 100 measurements (14.00%)
+  5 (5.00%) high mild
+  9 (9.00%) high severe
+remove/100000           time:   [345.36 µs 349.02 µs 352.98 µs]
+Found 3 outliers among 100 measurements (3.00%)
+  3 (3.00%) high mild
