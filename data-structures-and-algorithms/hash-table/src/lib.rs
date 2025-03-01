@@ -14,11 +14,11 @@ Reasoning :
     while also providing O(1) get_first and get_last by linking entries.
 
 Note: Re-export trait and struct here, so users can simply `use hash_table::HashTable` or
-`use hash_table::LinkedOpenAddressing`.
+`use hash_table::LinkedHashTable`.
 */
 
-mod traits;
 mod linked_open_addressing;
+mod traits;
 
 // Re-export the HashTable trait so consumers can do `use hash_table::HashTable;`.
 pub use traits::HashTable;
@@ -28,9 +28,12 @@ pub use linked_open_addressing::LinkedOpenAddressing as LinkedHashTable;
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
-    fn sanity_check() {
-        // Just a quick check to ensure tests are running
-        assert_eq!(3.0 + 0.14, 3.14);
+    fn basic_usage_example() {
+        let mut table = LinkedHashTable::new(5);
+        table.insert("PI", 314);
+        assert_eq!(table.get(&"PI"), Some(&314));
     }
 }
