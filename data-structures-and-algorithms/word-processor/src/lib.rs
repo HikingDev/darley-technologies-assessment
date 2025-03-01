@@ -13,15 +13,15 @@ This module re-exports the main structs and functions.
 
 mod capacity;
 mod config;
+pub mod error;
 pub mod io;
 mod parser;
 
-pub use capacity::estimate_capacity;
+// Re-export the main structs and functions
 pub use config::WordProcessorConfig;
+pub use error::WordProcessorError;
 pub use parser::parse_text;
-
-// If you want to re-export the `io` APIs directly, you could do so here, e.g.:
-// pub use io::{read_text_from_path, fetch_text_from_url};
+pub use capacity::{estimate_capacity, EstimationMethod};
 
 #[cfg(test)]
 mod tests {
