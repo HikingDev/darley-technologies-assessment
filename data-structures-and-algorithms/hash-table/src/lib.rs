@@ -24,7 +24,7 @@ mod linked_open_addressing;
 pub use traits::HashTable;
 
 // Re-export our linked open addressing table with doubly linked list tracking.
-pub use linked_open_addressing::LinkedOpenAddressing;
+pub use linked_open_addressing::LinkedOpenAddressing as LinkedHashTable;
 
 #[cfg(test)]
 mod tests {
