@@ -344,12 +344,83 @@ mod tests {
         let mut table = LinkedOpenAddressing::new(5);
 
         // Insert a key-value pair
-        assert_eq!(table.insert("hello", 42), None);
+        assert_eq!(table.insert("TravelersGuide", 42), None);
 
         // Now retrieve it
-        assert_eq!(table.get(&"hello"), Some(&42));
+        assert_eq!(table.get(&"TravelersGuide"), Some(&42));
 
         // Confirm length is correct
         assert_eq!(table.len(), 1);
+    }
+
+    #[test]
+    fn test_update_existing_key() {
+        let mut table = LinkedOpenAddressing::new(5);
+
+        table.insert("Injective", 55);
+        assert_eq!(table.insert("Injective", 120), Some(55));
+        assert_eq!(table.get(&"Injective"), Some(&120));
+    }
+
+    #[test]
+    fn test_remove() {
+        let mut table = LinkedOpenAddressing::new(5);
+
+        table.insert("Bitcoin", 125000);
+        table.insert("Ethereum", 12728);
+
+        assert_eq!(table.remove(&"Bitcoin"), Some(125000));
+        assert_eq!(table.get(&"Bitcoin"), None);
+        assert_eq!(table.len(), 1);
+    }
+
+    #[test]
+    fn test_ordering() {
+        let mut table = LinkedOpenAddressing::new(5);
+
+        table.insert("Celestia", 25);
+        table.insert("Casper", 2);
+        table.insert("Akash", 15);
+
+        assert_eq!(table.get_first(), Some((&"Celestia", &25)));
+        assert_eq!(table.get_last(), Some((&"Akash", &15)));
+
+        // Update Celestia key
+        table.insert("Celestia", 35);
+
+        // Now "Celestia" should be the most recent
+        assert_eq!(table.get_first(), Some((&"Casper", &2)));
+        assert_eq!(table.get_last(), Some((&"Celestia", &35)));
+    }
+
+    #[test]
+    fn test_collisions() {
+        // Use a custom hasher that always returns the same hash
+        struct AlwaysCollideHasher;
+        impl Hasher for AlwaysCollideHasher {
+            fn finish(&self) -> u64 {
+                0
+            }
+            fn write(&mut self, _: &[u8]) {}
+        }
+
+        struct AlwaysCollideState;
+        impl BuildHasher for AlwaysCollideState {
+            type Hasher = AlwaysCollideHasher;
+            fn build_hasher(&self) -> AlwaysCollideHasher {
+                AlwaysCollideHasher
+            }
+        }
+
+        let mut table = LinkedOpenAddressing::with_hasher(5, AlwaysCollideState);
+
+        // All these keys will hash to the same slot (0)
+        table.insert("Ripple", 1);
+        table.insert("Stellar", 2);
+        table.insert("Hedera", 3);
+
+        assert_eq!(table.get(&"Ripple"), Some(&1));
+        assert_eq!(table.get(&"Stellar"), Some(&2));
+        assert_eq!(table.get(&"Hedera"), Some(&3));
     }
 }
