@@ -4,3 +4,19 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+regex = "1.11"
+
+# Optional URL fetching support
+reqwest = { version = "0.12", features = ["blocking"], optional = true }
+
+# Used only in tests
+[dev-dependencies]
+tempfile = "3.17"
+
+[features]
+default = []
+url = ["reqwest"]
+
+[[example]]
+name = "gutenberg_analysis"
+required-features = []
