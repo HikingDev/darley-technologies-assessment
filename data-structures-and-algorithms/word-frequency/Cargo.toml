@@ -4,3 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+hash-table = { path = "../hash-table" }
+word-processor = { path = "../word-processor" }
+clap = { version = "4.5", features = ["derive"] }
+
+[features]
+default = []
+url = ["word-processor/url"]

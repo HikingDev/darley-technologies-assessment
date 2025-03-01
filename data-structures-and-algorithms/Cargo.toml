@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
 members = [
-  "hash-table",
+  "hash-table", "word-frequency",
   "word-processor"
 ]
