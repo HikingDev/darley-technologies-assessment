@@ -7,6 +7,7 @@ use std::error::Error;
 async fn main() -> Result<(), Box<dyn Error>> {
     let client = BinanceOptionsClient::new();
 
+    //let json_data = client.get_ticker_raw("ETH-250307-2450-C".into()).await?; //only ETH Instrument
     let json_data = client.get_ticker_raw(None).await?;
 
     let (parsed_tickers, metrics) =

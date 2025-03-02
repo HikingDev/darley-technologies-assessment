@@ -58,7 +58,7 @@ pub fn parse_ticker_streaming(
 
     match top_value {
         Value::Array(arr) => {
-            let mut tickers = Vec::new();
+            let mut tickers = Vec::with_capacity(1600); // max 1400 Tickers currently so a little buffer wont harm
             // Iterate over each element in the array and deserialize it.
             for item in arr {
                 let ticker: OptionTicker =

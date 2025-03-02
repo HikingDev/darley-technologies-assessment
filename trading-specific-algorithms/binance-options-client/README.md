@@ -1,5 +1,91 @@
 # Implementation Overview
 
+## Results
+
+Single Entry (ETH only):
+
+Time per entry: ~0.313834 ms
+Total time: ~0.313834 ms
+This relatively high per-entry time is due to fixed initialization overhead
+(e.g., setting up the deserializer, and any other one-time costs)
+that isn’t amortized when only one entry is processed.
+
+Consideration:
+- Try vector of Tickers to see how it affects the runtime.
+- Also pre-allocate vector to avoid reallocations during runtime.
+
+```
+Instrument Statistics:
+=======================
+Symbol: ETH-250307-2450-C (Strike: 2450)
+Last Price: 12.2 (Change: 0.7429%)
+Bid/Ask: 10.4/10.6
+24h High/Low: 13/7
+Volume: 27.8 contracts (Amount: 232.51)
+Trade Count: 9
+--------------------------------------------------
+
+Parsing Performance Metrics:
+============================
+Time per entry: 0.313834 ms
+Total time: 0.313834 ms
+Entries parsed: 1
+```
+
+All Entries (1400 tickers):
+
+Time per entry: ~0.027663 ms
+Total time: ~38.728 ms
+With a larger batch, the fixed overhead is spread across many entries,
+reducing the average time per entry.
+
+```
+Instrument Statistics:
+=======================
+Symbol: BNB-250305-555-P (Strike: 555)
+Last Price: 0 (Change: 0%)
+Bid/Ask: 0.8/1.7
+24h High/Low: 0/0
+Volume: 0 contracts (Amount: 0)
+Trade Count: 0
+--------------------------------------------------
+Symbol: BTC-250314-115000-P (Strike: 115000)
+Last Price: 18800 (Change: 0%)
+Bid/Ask: 24780/0
+24h High/Low: 18800/18800
+Volume: 0 contracts (Amount: 0)
+Trade Count: 0
+--------------------------------------------------
+Symbol: BTC-251226-120000-P (Strike: 120000)
+Last Price: 0 (Change: 0%)
+Bid/Ask: 10/0
+24h High/Low: 0/0
+Volume: 0 contracts (Amount: 0)
+Trade Count: 0
+--------------------------------------------------
+Symbol: BTC-250303-85000-C (Strike: 85000)
+Last Price: 1235 (Change: 0.0978%)
+Bid/Ask: 1125/1205
+24h High/Low: 1680/1115
+Volume: 3.42 contracts (Amount: 3975.95)
+Trade Count: 16
+--------------------------------------------------
+Symbol: ETH-250307-2450-C (Strike: 2450)
+Last Price: 12.2 (Change: 0.7429%)
+Bid/Ask: 10.6/10.8
+24h High/Low: 13/7
+Volume: 27.8 contracts (Amount: 232.51)
+Trade Count: 9
+--------------------------------------------------
+... and 1395 more instruments
+
+Parsing Performance Metrics:
+============================
+Time per entry: 0.027663 ms
+Total time: 38.728000 ms
+Entries parsed: 1400
+```
+
 ## Serialization/Deserialization Considerations
 
 **Full Document Deserialization:**
