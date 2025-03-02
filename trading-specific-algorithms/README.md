@@ -1,6 +1,6 @@
 # Trading Specific Algorithms
 
-Review the Binance European Options API documentation at [https://binance-docs.github.io/apidocs/voptions/en/](https://binance-docs.github.io/apidocs/voptions/en/).
+Review the Binance European Options API documentation at [binance voptions](https://binance-docs.github.io/apidocs/voptions/en/).
 
 Then:
 

@@ -93,3 +93,7 @@ Our evaluation prioritized:
 
 Based on these requirements, Reqwest provides the best balance of performance and usability for our trading application,
 with direct Hyper as an alternative when maximum control is needed.
+
+Note:
+Futures and Vanilla Options APIs are not supported by https://github.com/binance/binance-spot-connector-rust
+But Since there are similarities, it can be leveraged for implementation considerations.
