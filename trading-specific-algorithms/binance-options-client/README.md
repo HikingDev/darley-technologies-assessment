@@ -3,22 +3,26 @@
 ## Serialization/Deserialization Considerations
 
 **Full Document Deserialization:**
-Load the entire JSON payload into memory using serde_json::from_str.
-While straightforward, this approach can become memory-intensive with large responses.
+- Load the entire JSON payload into memory using `serde_json::from_str`.
+- While straightforward, this approach can become memory-intensive with large responses.
 
 **Streaming Deserialization (Chosen):**
-Use `serde_json::Deserializer::from_str` to incrementally parse the JSON stream.
-This method minimizes memory usage by processing one JSON entry at a time, making it ideal for high-frequency or large data sets.
+- Use `serde_json::Deserializer::from_str` to incrementally parse the JSON stream.
+- Note: The Binance Options API returns ticker data as a JSON array rather than a stream of individual JSON objects (e.g., NDJSON). To accommodate this:
+       1) Deserialize the top-level JSON into a serde_json::Value to extract the array.
+       2) Deserialize each element in the array individually into an OptionTicker using a streaming approach.
+- This method minimizes memory usage by processing one JSON entry at a time while maintaining low latency.
 
 **Asynchronous Parsing:**
-Incorporate async I/O (e.g. using `tokio_serde_json` or `actson`) to process data non-blockingly. Although promising for scalability, this option adds complexity and was postponed for a later stage.
+- Incorporate async I/O (e.g. using `tokio_serde_json` or `actson`) to process data non-blockingly. Although promising for scalability, this option adds complexity and was postponed for a later stage.
+- Although this option is promising for scalability, it adds complexity and is postponed for a later stage.
 
 **Chosen Solution**
 For the initial implementation, streaming deserialization was chosen because:
 
-- It provides a low memory footprint by processing the JSON stream entry by entry.
-- It meets the low-latency requirements by parsing each instrument statistic quickly.
-- It is simple to integrate using the synchronous I/O primitives available in Rust.
+- Provides a low memory footprint by processing JSON entries incrementally.
+- Meets low-latency requirements by quickly parsing each instrument statistic.
+- Simple to integrate using Rust’s synchronous I/O primitives.
 
 
 ### Potential Optimizations
