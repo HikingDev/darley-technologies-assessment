@@ -41,11 +41,13 @@ Evaluate high-performance alternatives such as `simd_json` for potential gains i
 
 ### HTTP Client Considerations
 
-**Reqwest (Recommended):**
+**Reqwest (Chosen):**
 - Built on Hyper/Tokio with excellent performance
 - High-level API with easy JSON handling
 - Connection pooling and HTTP/2 support
 - Matches Binance's official (Spot) SDK approach (uses Hyper)
+- **Asynchronous execution with Tokio:** This client leverages `reqwest` in asynchronous mode, managed by the `tokio` runtime.
+  This allows for concurrent handling of multiple API requests, improving performance and responsiveness.
 
 **Hyper:**
 - Low-level HTTP implementation with maximum performance
@@ -96,4 +98,4 @@ with direct Hyper as an alternative when maximum control is needed.
 
 Note:
 Futures and Vanilla Options APIs are not supported by https://github.com/binance/binance-spot-connector-rust
-But Since there are similarities, it can be leveraged for implementation considerations.
+But Since there are similarities, it can be leveraged for implementation
