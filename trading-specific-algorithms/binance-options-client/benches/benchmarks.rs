@@ -2,7 +2,7 @@ use binance_options_client::parser::ParsingStrategy;
 use binance_options_client::{BinanceOptionsClient, OptionTicker};
 use criterion::{BenchmarkId, Criterion, black_box, criterion_group, criterion_main};
 use futures::future::join_all;
-use rand::rng;
+use rand::prelude::IndexedRandom;
 use std::time::Duration;
 use tokio::runtime::Runtime;
 
@@ -36,7 +36,7 @@ fn bench_complete_workflow(c: &mut Criterion) {
 
                 b.iter(|| {
                     rt.block_on(async {
-                        let mut rng = thread_rng();
+                        let mut rng = rand::thread_rng();
 
                         // Simulate n parallel requests for random tickers
                         let tasks = (0..n).map(|_| {
@@ -124,17 +124,14 @@ fn bench_parsing_strategies(c: &mut Criterion) {
     group.finish();
 }
 
-// Helper function to simulate processing a ticker (used in benchmarks)
 #[inline]
 fn process_ticker(ticker: &OptionTicker) -> String {
-    // Simulating some processing on the ticker data
     format!(
         "{} - {} - {} - {} - {}",
         ticker.symbol, ticker.last_price, ticker.volume, ticker.strike_price, ticker.trade_count
     )
 }
 
-// Individual component benchmarks
 fn bench_fetch_ticker_data(c: &mut Criterion) {
     let rt = Runtime::new().expect("Failed to create Tokio runtime");
     let client = BinanceOptionsClient::new();

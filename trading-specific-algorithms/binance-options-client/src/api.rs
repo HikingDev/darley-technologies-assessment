@@ -257,6 +257,31 @@ impl BinanceOptionsClient {
 
         Ok((tickers, metrics))
     }
+
+    /// Parses ticker JSON data using the specified parsing strategy (default is streaming).
+    ///
+    /// # Arguments
+    ///
+    /// * `json_data` - A string slice containing JSON ticker data.
+    /// * `strategy` - An optional parsing strategy. If `None` is provided, streaming is used.
+    ///
+    /// # Returns
+    ///
+    /// A vector of `OptionTicker` entries.
+    pub fn parse_ticker(
+        &self,
+        json_data: &str,
+        strategy: Option<crate::parser::ParsingStrategy>,
+    ) -> Result<Vec<OptionTicker>, BinanceOptionsClientError> {
+        info!("Parsing ticker data using selected strategy (default is streaming)");
+
+        // Delegate to the parser module.
+        let tickers = crate::parser::parse_ticker(json_data, strategy)?;
+
+        info!("Parsed {} ticker entries", tickers.len());
+
+        Ok(tickers)
+    }
 }
 
 #[cfg(test)]

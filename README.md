@@ -43,6 +43,8 @@ data-structures-and-algorithms/
 ## Building and Running
 
 ```bash
+cd data-structures-and-algorithms
+
 # Build all crates
 cargo build
 
