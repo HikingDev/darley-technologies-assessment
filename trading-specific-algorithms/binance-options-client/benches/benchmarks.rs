@@ -36,7 +36,7 @@ fn bench_complete_workflow(c: &mut Criterion) {
 
                 b.iter(|| {
                     rt.block_on(async {
-                        let mut rng = rand::thread_rng();
+                        let mut rng = rand::rng();
 
                         // Simulate n parallel requests for random tickers
                         let tasks = (0..n).map(|_| {

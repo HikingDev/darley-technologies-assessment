@@ -1,6 +1,6 @@
 # Implementation Overview
 
-## Results
+## Results Parsing
 
 Single Entry (ETH only):
 
@@ -85,6 +85,34 @@ Time per entry: 0.027663 ms
 Total time: 38.728000 ms
 Entries parsed: 1400
 ```
+
+after pre-allocating vector to avoid reallocations during runtime, the total rutime for the 1400 tickers
+could be reduced
+
+## Results Async Requests
+
+Benchmarking Complete Ticker Workflow/simulated_requests/10: Warming up for 3.0000 s
+thread 'main' panicked at binance-options-client/benches/benchmarks.rs:27:26:
+Failed to fetch tickers: ApiError { code: -1003, msg: "Too many requests; current limit of IP(194.230.148.204) is 400 requests per minute. Please use the websocket for live updates to avoid polling the API." }
+
+During our benchmark testing with async requests, we encountered API rate limits that make REST endpoint benchmarking ineffective for high-throughput scenarios.
+As shown in the error message above, Binance imposes a strict limit of 400 requests per minute per IP address:
+
+> ApiError { code: -1003, msg: "Too many requests; current limit of IP is 400 requests per minute. Please use the websocket for live updates to avoid polling the API." }
+
+This limitation renders any benchmark attempting to simulate multiple simultaneous clients or high-frequency trading scenarios impractical using REST endpoints.
+With only 400 requests per minute (approximately 6-7 requests per second), any realistic trading application would quickly exhaust this quota.
+
+The error message directly points to the recommended solution: WebSockets. For real-time data needs, especially in trading applications where millisecond latency matters, WebSocket connections provide:
+
+1. **Continuous data stream** without repeated polling
+2. **Lower overhead** per data update
+3. **Reduced latency** compared to REST polling
+4. **No rate limiting** for passive listening
+5. **Push-based architecture** ideal for market data
+
+Our results confirm that while our parsing implementation is efficient (27.6μs per ticker),
+any production system requiring frequent updates should use WebSockets for market data consumption and reserve REST endpoints for account management and trade execution only.
 
 ## Serialization/Deserialization Considerations
 
